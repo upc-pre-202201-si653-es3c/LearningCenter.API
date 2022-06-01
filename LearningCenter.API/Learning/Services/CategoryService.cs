@@ -58,8 +58,23 @@ public class CategoryService : ICategoryService
         }
     }
 
-    public Task<CategoryResponse> DeleteAsync(int id)
+    public async Task<CategoryResponse> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var existingCategory = await _categoryRepository.FindByIdAsync(id);
+
+        if (existingCategory == null)
+            return new CategoryResponse("Category not found.");
+
+        try
+        {
+            _categoryRepository.Remove(existingCategory);
+            await _unitOfWork.CompleteAsync();
+
+            return new CategoryResponse(existingCategory);
+        }
+        catch (Exception e)
+        {
+            return new CategoryResponse($"An error occurred while deleting the category: {e.Message}");
+        }
     }
 }
