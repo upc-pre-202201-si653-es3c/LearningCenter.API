@@ -43,7 +43,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> GetAllAsync()
     {
         var users = await _userService.ListAsync();
-        var resources = _mapper.Map<IEnumerable<User>, IEnumerable<UserRepository>>(users);
+        var resources = _mapper.Map<IEnumerable<User>, IEnumerable<UserResource>>(users);
         return Ok(resources);
     }
 
